@@ -1,0 +1,16 @@
+{
+  "name": "expendientes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_PATH=. babel-watch --presets es2015 index.js"
+  },
+  "author": "Oscar Pérez <mr.omiguelperez@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-watch": "^2.0.6",
+    "express": "^4.15.3"
+  }
+}
