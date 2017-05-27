@@ -42,7 +42,7 @@ export function create (req, res) {
 
   expediente.save((err, created) => {
     if (err) return res.status(500).json(err)
-    res.json(created)
+    res.status(201).json(created)
   })
 }
 
@@ -52,15 +52,19 @@ export function create (req, res) {
 export function update (req, res) {
   let
     id = req.params.id,
-    data = req.body
+    expedienteActualizado = req.body
 
   if (id && !mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send('Invalid `id`')
 
-  Expediente.findByIdAndUpdate({ _id: id }, { $set: data }, (err, updated) => {
+  Expediente.findById(id, (err, expediente) => {
     if (err) return res.status(500).json(err)
-    else if (!updated) return res.status(404).send('Not found')
-    res.json(updated)
+    else if (!expediente) return res.status(404).send('Not found')
+
+    Expediente.update({ _id: id }, expedienteActualizado, (err, raw) => {
+      if (err) return res.status(500).json(err)
+      res.json(expedienteActualizado)
+    })
   })
 }
 
