@@ -4,8 +4,6 @@ import { MongoClient, ObjectId } from 'mongodb'
 import { handleError, sendResponse } from 'src/models/helper'
 import connect from 'src/models/connect'
 
-const url = 'mongodb://localhost/expedientes'
-
 /**
  * Find all `expedientes`
  */
@@ -30,19 +28,17 @@ export function find (query, callback) {
  */
 
 export function findById (id, callback) {
-  try {
-    MongoClient.connect(url, (err, db) => {
+  connect()
+    .then(db => findExpedienteById(db))
+    .catch(err => handleError(err, callback))
+
+  function findExpedienteById (db) {
+    const collection = db.collection('expedientes')
+
+    collection.findOne({ _id: ObjectId(id) }, (err, doc) => {
       if (err) return handleError(err, callback, db)
-
-      const collection = db.collection('expedientes')
-
-      collection.findOne({ _id: ObjectId(id) }, (err, doc) => {
-        if (err) return handleError(err, callback, db)
-        return sendResponse(doc, callback, db)
-      })
+      return sendResponse(doc, callback, db)
     })
-  } catch (err) {
-    handleError(err, callback)
   }
 }
 
@@ -51,19 +47,17 @@ export function findById (id, callback) {
  */
 
 export function save (data, callback) {
-  try {
-    MongoClient.connect(url, (err, db) => {
+  connect()
+    .then(db => saveExpediente(db))
+    .catch(err => handleError(err, callback))
+
+  function saveExpediente (db) {
+    const collection = db.collection('expedientes')
+
+    collection.insert(data, (err, result) => {
       if (err) return handleError(err, callback, db)
-
-      const collection = db.collection('expedientes')
-
-      collection.insert(data, (err, result) => {
-        if (err) return handleError(err, callback, db)
-        return sendResponse(result.ops[0], callback, db)
-      })
+      return sendResponse(result.ops[0], callback, db)
     })
-  } catch (err) {
-    handleError(err, callback)
   }
 }
 
@@ -72,24 +66,22 @@ export function save (data, callback) {
  */
 
 export function findByIdAndRemove (id, callback) {
-  try {
-    MongoClient.connect(url, (err, db) => {
+  connect()
+    .then(db => findExpedienteByIdAndRemove(db))
+    .catch(err => handleError(err, callback))
+
+  function findExpedienteByIdAndRemove (db) {
+    const collection = db.collection('expedientes')
+
+    collection.findOne({ _id: ObjectId(id) }, (err, doc) => {
       if (err) return handleError(err, callback, db)
+      else if (!doc) return callback()
 
-      const collection = db.collection('expedientes')
-
-      collection.findOne({ _id: ObjectId(id) }, (err, doc) => {
+      collection.deleteOne({ _id: ObjectId(id) }, (err, result) => {
         if (err) return handleError(err, callback, db)
-        else if (!doc) return callback()
-
-        collection.deleteOne({ _id: ObjectId(id) }, (err, result) => {
-          if (err) return handleError(err, callback, db)
-          return sendResponse(true, callback, db)
-        })
+        return sendResponse(true, callback, db)
       })
     })
-  } catch (err) {
-    handleError(err, callback)
   }
 }
 
@@ -98,18 +90,16 @@ export function findByIdAndRemove (id, callback) {
  */
 
 export function updateOne (id, updateInfo, callback) {
-  try {
-    MongoClient.connect(url, (err, db) => {
+  connect()
+    .then(db => updateExpediente(db))
+    .catch(err => handleError(err, callback))
+
+  function updateExpediente (db) {
+    const collection = db.collection('expedientes')
+
+    collection.updateOne({ _id: ObjectId(id) }, updateInfo, (err, result) => {
       if (err) return handleError(err, callback, db)
-
-      const collection = db.collection('expedientes')
-
-      collection.updateOne({ _id: ObjectId(id) }, updateInfo, (err, result) => {
-        if (err) return handleError(err, callback, db)
-        return sendResponse(result, callback, db)
-      })
+      return sendResponse(result, callback, db)
     })
-  } catch (err) {
-    handleError(err, callback)
   }
 }
