@@ -19,7 +19,6 @@ Expedientes, ES6, MongoDB & Express
     Respuesta (201) Created
 
     {
-      "__v": 0,
       "deudor": "Luiz Gillermo Sarmiento Aguilar",
       "_id": "5928dff7e5124a42682d4819"
     }
@@ -33,8 +32,7 @@ Expedientes, ES6, MongoDB & Express
     [
       {
         "_id": "5928e14a5ee53a4425f8d2a7",
-        "deudor": "Luiz Gillermo Sarmiento Aguilar",
-        "__v": 0
+        "deudor": "Luiz Gillermo Sarmiento Aguilar"
       }
     ]
 
@@ -46,8 +44,7 @@ Expedientes, ES6, MongoDB & Express
 
     {
       "_id": "5928dff7e5124a42682d4819",
-      "deudor": "Luiz Gillermo Sarmiento",
-      "__v": 0
+      "deudor": "Luiz Gillermo Sarmiento"
     }
 
 
@@ -69,5 +66,5 @@ Expedientes, ES6, MongoDB & Express
     Respuesta (200) OK
 
     {
-      "deudor": "Elloit Alderson",
+      "deudor": "Elloit Alderson"
     }

@@ -7,13 +7,14 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import * as Expediente from 'src/models/Expediente'
+import { handleError } from 'src/api/helper'
 
 /**
  * Get all `expedientes`
  */
 export function find (req, res) {
   Expediente.find({}, (err, expedientes) => {
-    if (err) return res.status(500).json(err)
+    if (err) return handleError(err, res)
     res.json(expedientes)
   })
 }
@@ -28,7 +29,7 @@ export function findById (req, res) {
     return res.status(400).send('Invalid `id`')
 
   Expediente.findById(id, (err, expediente) => {
-    if (err) return res.status(500).json(err)
+    if (err) return handleError(err, res)
     else if (!expediente) return res.status(404).send('Not found')
     res.json(expediente)
   })
@@ -39,7 +40,7 @@ export function findById (req, res) {
  */
 export function create (req, res) {
   Expediente.save(req.body, (err, created) => {
-    if (err) return res.status(500).json(err)
+    if (err) return handleError(err, res)
     res.status(201).json(created)
   })
 }
@@ -56,11 +57,11 @@ export function update (req, res) {
     return res.status(400).send('Invalid `id`')
 
   Expediente.findById(id, (err, expediente) => {
-    if (err) return res.status(500).json(err)
+    if (err) return handleError(err, res)
     else if (!expediente) return res.status(404).send('Not found')
 
     Expediente.updateOne(id, expedienteActualizado, (err, raw) => {
-      if (err) return res.status(500).json(err)
+      if (err) return handleError(err, res)
       res.json(expedienteActualizado)
     })
   })
@@ -76,7 +77,7 @@ export function remove (req, res) {
     return res.status(400).send('Invalid `id`')
 
   Expediente.findByIdAndRemove(id, (err, expediente) => {
-    if (err) return res.status(500).json(err)
+    if (err) return handleError(err, res)
     else if (!expediente) return res.status(404).send('Not found')
     return res.status(204).send()
   })
