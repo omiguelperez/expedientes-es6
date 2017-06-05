@@ -1,8 +1,8 @@
 'use strict'
 
-import mongoose from 'mongoose'
 import { MongoClient, ObjectId } from 'mongodb'
 import { handleError, sendResponse } from 'src/models/helper'
+import connect from 'src/models/connect'
 
 const url = 'mongodb://localhost/expedientes'
 
@@ -11,19 +11,17 @@ const url = 'mongodb://localhost/expedientes'
  */
 
 export function find (query, callback) {
-  try {
-    MongoClient.connect(url, (err, db) => {
+  connect()
+    .then(db => findExpedientes(db))
+    .catch(err => handleError(err, callback))
+
+  function findExpedientes (db) {
+    const collection = db.collection('expedientes')
+
+    collection.find({}).toArray((err, docs) => {
       if (err) return handleError(err, callback, db)
-
-      const collection = db.collection('expedientes')
-
-      collection.find({}).toArray((err, docs) => {
-        if (err) return handleError(err, callback, db)
-        return sendResponse(docs, callback, db)
-      })
+      return sendResponse(docs, callback, db)
     })
-  } catch (err) {
-    handleError(err, callback)
   }
 }
 

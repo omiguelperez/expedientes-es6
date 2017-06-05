@@ -1,7 +1,6 @@
 'use strict'
 
 import express from 'express'
-import mongoose from 'mongoose'
 import { find, create, update, remove, findById } from 'src/api/Expediente'
 
 const router = express.Router()
