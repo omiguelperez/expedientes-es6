@@ -5,7 +5,7 @@
  */
 
 import express from 'express'
-import mongoose from 'mongoose'
+import { ObjectId } from 'mongodb'
 import * as Expediente from 'src/models/Expediente'
 import { handleError } from 'src/api/helper'
 
@@ -25,7 +25,7 @@ export function find (req, res) {
 export function findById (req, res) {
   let id = req.params.id
 
-  if (id && !mongoose.Types.ObjectId.isValid(id))
+  if (id && !ObjectId.isValid(id))
     return res.status(400).send('Invalid `id`')
 
   Expediente.findById(id, (err, expediente) => {
@@ -53,7 +53,7 @@ export function update (req, res) {
     id = req.params.id,
     expedienteActualizado = req.body
 
-  if (id && !mongoose.Types.ObjectId.isValid(id))
+  if (id && !ObjectId.isValid(id))
     return res.status(400).send('Invalid `id`')
 
   Expediente.findById(id, (err, expediente) => {
@@ -73,7 +73,7 @@ export function update (req, res) {
 export function remove (req, res) {
   let id = req.params.id
 
-  if (id && !mongoose.Types.ObjectId.isValid(id))
+  if (id && !ObjectId.isValid(id))
     return res.status(400).send('Invalid `id`')
 
   Expediente.findByIdAndRemove(id, (err, expediente) => {
