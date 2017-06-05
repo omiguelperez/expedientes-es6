@@ -3,11 +3,8 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 import http from 'http'
-import mongoose from 'mongoose'
 
 import api from 'src/api'
-
-mongoose.connect('mongodb://localhost/expendientes')
 
 const port = process.env.PORT || 8080
 

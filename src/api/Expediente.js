@@ -6,7 +6,7 @@
 
 import express from 'express'
 import mongoose from 'mongoose'
-import Expediente from 'src/models/Expediente'
+import * as Expediente from 'src/models/Expediente'
 
 /**
  * Get all `expedientes`
@@ -38,9 +38,7 @@ export function findById (req, res) {
  * Create new `expediente`
  */
 export function create (req, res) {
-  let expediente = new Expediente(req.body)
-
-  expediente.save((err, created) => {
+  Expediente.save(req.body, (err, created) => {
     if (err) return res.status(500).json(err)
     res.status(201).json(created)
   })
@@ -55,13 +53,13 @@ export function update (req, res) {
     expedienteActualizado = req.body
 
   if (id && !mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send('Invalid `id`')
+    return res.status(400).send('Invalid `id`')
 
   Expediente.findById(id, (err, expediente) => {
     if (err) return res.status(500).json(err)
     else if (!expediente) return res.status(404).send('Not found')
 
-    Expediente.update({ _id: id }, expedienteActualizado, (err, raw) => {
+    Expediente.updateOne(id, expedienteActualizado, (err, raw) => {
       if (err) return res.status(500).json(err)
       res.json(expedienteActualizado)
     })
@@ -75,11 +73,11 @@ export function remove (req, res) {
   let id = req.params.id
 
   if (id && !mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send('Invalid `id`')
+    return res.status(400).send('Invalid `id`')
 
   Expediente.findByIdAndRemove(id, (err, expediente) => {
     if (err) return res.status(500).json(err)
     else if (!expediente) return res.status(404).send('Not found')
-    res.status(204).send()
+    return res.status(204).send()
   })
 }
